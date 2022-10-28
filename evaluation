@@ -1,0 +1,133 @@
+
+	public static void main(String[] args) {
+		
+		// problem 1 anagram count
+    
+		System.out.println(" problem :1 ");
+		String s1 = "abba";
+		String s2 = "abcd";
+		System.out.println(findAnagramCount(s1));
+		System.out.println(findAnagramCount(s2));
+		
+		// problem 2 leader
+    
+		System.out.println(" problem :2+" ");
+		int arr[] = {16,17,4,3,5,2};
+		List<Integer> list = findLeader(arr);
+		System.out.println(list);
+		
+	    // Question 3 largestSub array sum
+		System.out.println(" problem :3 ");
+		int num[] = {15,2,3,-5,-8,1,7,10};
+		int ans3 = findLargestSubArray(num);
+		System.out.println(ans3);
+		
+		// problem 4 finding permutation
+		System.out.println(" problem :4 ");
+		int nums1 [] = {5,4,3,2,1,6,5};
+		int nums2 [] = {1,2,3,4,5,6,5};
+		String ans = findPermutation(nums1,nums2);
+		System.out.println(ans);
+		
+		// question 5 finding at least k number of times
+		System.out.println(" problem :5");
+		int count=2;
+		int nums[]= {1,7,4,3,4,8,7};
+		int number = findAtleastKNunmerOfRepetation(nums , count);
+		System.out.println(number);
+		
+	
+	}
+
+    // problem -- 1
+	
+	private static int findAnagramCount(String s) {
+	      List< String > list = new ArrayList<>();
+		for(int i = 1 ; i<s.length() ;i++) {
+			for(int j=0 ; i+j <= s.length() ; j++) {
+				list.add(s.substring(j,j+i));
+			}
+		}
+		//System.out.println(list);
+		int count=0;
+		 for(int i=0; i<list.size();i++) {
+			 String s1 = list.get(i);
+			 for(int j=i+1;j<list.size();j++) {
+				 String s2 = list.get(j);
+				 if(findAnagram(s1 , s2))count++;
+			 }
+			 
+		 }
+		return count;
+	}
+	private static boolean findAnagram(String s1,String s2) {
+		if(s1.length() != s2.length())return false;
+		if(s1.equals (s2))return true;
+		int arr[] = new int [95];
+		for(char c : s1.toCharArray())arr[ c - 32 ]++;
+		for(char c : s2.toCharArray())arr[ c - 32 ]--;
+		for(int i: arr)if(i!=0)return false;
+		return true;
+	}
+
+	 // problem -- 2
+	
+	private static List<Integer> findLeader(int[] arr) {
+		ArrayList <Integer> list = new ArrayList<>();
+		int max=arr[arr.length-1];
+		list.add(max);
+		for(int i = arr.length-2;i>=0 ; i--) {
+			if(arr[i]>max) {
+				list.add(arr[i]);
+				max=arr[i];
+			}
+		}
+		return list;
+	}
+	
+	 // problem -- 3
+	
+	private static int findLargestSubArray(int[] arr) {
+	    int max=Integer.MIN_VALUE;
+	    int start=0;
+	    int sum=arr[0];
+	    for(int end=1;end<arr.length;end++) {
+	    	sum+=arr[end];
+	    	if(sum == arr[start]) {	    		
+	    		sum -= arr[start++];
+	    	  }	
+	    	if(sum == 0)max=Math.max(max,end-start +1);	
+	    	}
+		return max;
+	}
+    
+	 // problem -- 4
+	
+	private static String findPermutation(int[] nums1, int[] nums2) {
+		Map <Integer,Integer> map = new HashMap<>();
+		
+		for(int i : nums1) {
+			map.put(i, map.getOrDefault(i,0)+1);
+		}
+	    for(int i : nums2) {
+	    	if(map.containsKey(i)) {
+	    		map.put(i, map.get(i)-1);
+	    		if(map.get(i)==0)map.remove(i);
+	    	}
+	    	else return "not equal";
+	    }
+		return "equal";
+	}
+
+	 // problem -- 5
+	
+	private static int findAtleastKNunmerOfRepetation(int[] nums, int count) {
+		Map <Integer,Integer> map = new HashMap<>();
+		for(int i : nums) {
+		     map.put(i, map.getOrDefault(i, 0)+1);
+		     if(map.get(i) == count)return i;
+		}
+		return -1;
+	}
+	
+	
